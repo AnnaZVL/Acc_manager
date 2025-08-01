@@ -1,7 +1,9 @@
+import type { Label } from "@/types/inputs";
+
 export interface Account {
     id: number
-    label: string[];
-    type: AccountType
+    label: Label[];
+    type: AccountType | null
     login: string
     password: string | null
 };

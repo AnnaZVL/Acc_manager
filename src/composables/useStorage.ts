@@ -1,17 +1,26 @@
 export const useStorage = <T>() => {
     
-    const toLocalStorage = (key: string, arr: Array<T>):void => {
+    const toLocalStorage = (key: string, arr: Array<T>): void => {
         localStorage.setItem(key, JSON.stringify(arr));        
     }
 
     const fromLocalStorage = (key: string, defaultArr: Array<T>): Array<T> => {
-        let currentArr = localStorage.getItem(key);
+        const currentArr = localStorage.getItem(key);
         
         if (!currentArr) {            
             toLocalStorage(key, defaultArr)
             return defaultArr
         }
-        return JSON.parse(currentArr) as Array<T>
+        
+        try {
+            const parsed: unknown = JSON.parse(currentArr);
+            if (Array.isArray(parsed)) {
+                return parsed as Array<T>;
+            }
+            return defaultArr;
+        } catch {
+            return defaultArr;
+        }
     }
 
     return {
